@@ -1,0 +1,76 @@
+TITLE: Measurement Invariance Across Sex - Metric Manual (7y)
+
+DATA:
+FILE = mplus1.dat.csv;
+
+VARIABLE:
+NAMES = sex
+        tant7 and7 ang7
+        tant10 and10 ang10
+        tant13 and13 ang13
+        tant15 and15 ang15
+        m_tant25 m_and25 m_ang25
+        s_tant25 s_and25 s_ang25
+        ma_ups ma_temp ma_angl ma_angm ma_angf  ma_tempe ma_prob
+        sa_ups sa_temp sa_angl sa_angm sa_angf sa_tempe sa_prob;
+
+USEVAR = sex tant7 and7 ang7;
+         
+
+MISSING = ALL(-9);
+
+
+CATEGORICAL = tant7 and7 ang7;
+             
+              
+GROUPING = sex (7 = male 8 = female);
+
+ANALYSIS:
+ESTIMATOR = WLSMV;
+
+ MODEL:
+    !Factor loadings equal
+    Irr7 by tant7@1;
+    Irr7 by and7 ang7 (2-3);
+ 
+    !First threshold equal and second free
+    [tant7$1] (4);
+    [tant7$2] (7);
+    [and7$1] (5);
+    [and7$2];
+    [ang7$1] (6);
+    [ang7$2];
+ 
+    !Scale factors fixed at 1
+    {tant7-ang7@1};
+ 
+    !Factor means fixed at 0
+    [Irr7@0];
+ 
+    !Factor variances free
+    Irr7;
+ 
+  MODEL female:
+ 
+    !Factor loadings equal
+    Irr7 by tant7@1;
+    Irr7 by and7 ang7 (2-3);
+ 
+    !First threshold equal and second free
+    [tant7$1] (4);
+    [tant7$2] (7);
+    [and7$1] (5);
+    [and7$2];
+    [ang7$1] (6);
+    [ang7$2];
+ 
+    !Scale factors free
+    {tant7-ang7};
+ 
+    !Factor means free
+    [Irr7];
+ 
+    !Factor variances free across groups
+    Irr7;
+
+OUTPUT: STAND; modindices (3.84);

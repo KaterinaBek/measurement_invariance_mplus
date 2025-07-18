@@ -1,0 +1,67 @@
+TITLE: Measurement Invariance Across Age - Partial Scalar 
+
+DATA:
+    FILE = mplus1.dat.csv;
+
+VARIABLE:
+    NAMES = sex
+    tant7 and7 ang7
+    tant10 and10 ang10	
+    tant13 and13 ang13	
+    tant15 and15 ang15	
+    m_tant25 m_and25 m_ang25
+    s_tant25 s_and25 s_ang25
+    ma_ups ma_temp ma_angl ma_angm ma_angf ma_tempe ma_prob
+    sa_ups sa_temp sa_angl sa_angm sa_angf sa_tempe sa_prob;
+
+USEVARIABLES = tant7 and7 ang7
+               tant10 and10 ang10
+               tant13 and13 ang13
+               tant15 and15 ang15
+               m_tant25 m_and25 m_ang25;
+
+MISSING = ALL(-9);
+
+CATEGORICAL = tant7 and7 ang7
+              tant10 and10 ang10
+              tant13 and13 ang13
+              tant15 and15 ang15
+              m_tant25 m_and25 m_ang25;
+
+ANALYSIS:
+    ESTIMATOR = WLSMV;
+    DIFFTEST=part.age.metr.dat;    
+    
+MODEL:
+Irr7 by and7 ang7 tant7  (1-3);
+Irr10 by and10 ang10 tant10 (1-3);
+Irr13 by and13 ang13 tant13 (1-3);
+Irr15 by and15 ang15 tant15  (1-3);
+Irr25 by m_and25 m_ang25 m_tant25 (1-3);
+
+[and7$1 and10$1 and13$1 and15$1 m_and25$1] (4); 
+[and7$2 and10$2 and13$2 and15$2 m_and25$2] (5);
+
+[ang7$1 ang10$1 ang13$1 ang15$1 m_ang25$1] (6);
+[ang7$2 ang10$2 ang13$2 ang15$2 m_ang25$2] (7);
+
+[tant7$1 tant10$1 tant13$1 tant15$1 m_tant25$1];
+[tant7$2 tant10$2 tant13$2 tant15$2 m_tant25$2];
+
+{tant7@1};
+{tant10@1};
+{tant13@1};
+{tant15@1};
+{m_tant25@1};
+
+[Irr7@0];
+[Irr10 Irr13 Irr15 Irr25];
+
+Irr7;
+Irr10;
+Irr13;
+Irr15;
+Irr25;
+    
+OUTPUT:
+STAND; modindices (3.84);

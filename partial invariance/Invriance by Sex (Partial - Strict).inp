@@ -1,0 +1,86 @@
+TITLE: Partial Strict Invariance by Sex - 15y (angry)
+
+DATA:
+FILE = mplus1.dat.csv;
+
+VARIABLE:
+NAMES = sex
+        tant7 and7 ang7
+        tant10 and10 ang10
+        tant13 and13 ang13
+        tant15 and15 ang15
+        m_tant25 m_and25 m_ang25
+        s_tant25 s_and25 s_ang25
+        ma_ups ma_temp ma_angl ma_angm ma_angf  ma_tempe ma_prob
+        sa_ups sa_temp sa_angl sa_angm sa_angf sa_tempe sa_prob;
+
+USEVAR = sex tant15 and15 ang15;
+         
+
+MISSING = ALL(-9);
+
+
+CATEGORICAL = tant15 and15 ang15;
+             
+              
+GROUPING = sex (7 = male 8 = female);
+
+ANALYSIS:
+ESTIMATOR = WLSMV; 
+PARAMETERIZATION=THETA; !needed for residual invariance testing
+DIFFTEST=scal.ang.dat; 
+
+MODEL:
+    !Factor loadings 
+    Irr15 by tant15 and15 ang15 (1-3);
+    
+
+    !Thresholds 
+    [tant15$1] (4);
+    [tant15$2] (5);
+    [and15$1] (6);
+    [and15$2] (7);
+    [ang15$1] (8);
+    [ang15$2] (9);
+
+    !Res var fixed for all but ang
+    tant15@1;
+    and15@1;
+    ang15;
+   
+    !Factor means fixed at 0
+    [Irr15@0];
+
+    !Factor variances free
+    Irr15;
+
+MODEL female:
+    !Factor loadings 
+    Irr15 by tant15 and15 ang15 (1-3);
+    
+    !Thresholds 
+    [tant15$1] (4);
+    [tant15$2] (5);
+    [and15$1] (6);
+    [and15$2] (7);
+    [ang15$1] (8);
+    [ang15$2] (9);
+
+    !Res var fixed for all but ang
+    tant15@1;
+    and15@1;
+    ang15;
+
+    !Factor means free
+    [Irr15];
+
+    !Factor variances free across groups
+    Irr15;
+
+OUTPUT: STAND; tech1; modindices (1);
+
+
+
+
+
+

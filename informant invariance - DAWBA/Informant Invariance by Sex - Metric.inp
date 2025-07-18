@@ -1,0 +1,44 @@
+TITLE: Measurement Invariance Across Informant / Female DAWBA - Metric 
+
+DATA:
+FILE = fem.dawba.csv;
+
+VARIABLE:
+NAMES = m_tant25 m_and25 m_ang25
+        s_tant25 s_and25 s_ang25;
+      
+USEVAR = m_tant25 m_and25 m_ang25
+         s_tant25 s_and25 s_ang25;
+
+MISSING = ALL(-9);
+
+CATEGORICAL =  m_tant25 m_and25 m_ang25
+               s_tant25 s_and25 s_ang25;
+               
+ANALYSIS:
+ESTIMATOR=WLSMV;
+
+MODEL: 
+IrrM BY m_tant25 m_and25 m_ang25 (1-3);
+IrrS BY s_tant25 s_and25 s_ang25 (1-3);  
+
+[m_tant25$1 s_tant25$1] (4);      
+[m_tant25$2 s_tant25$2] (5); 
+
+[m_and25$1 s_and25$1] (6);      
+[m_and25$2 s_and25$2];   
+
+[m_ang25$1 s_ang25$1] (7);      
+[m_ang25$2 s_ang25$2];
+
+{m_tant25-m_ang25@1};
+{s_tant25-s_ang25};
+
+[IrrM@0];
+[IrrS];
+
+IrrM;
+IrrS;
+ 
+       
+OUTPUT: STAND; modindices (3.84);
